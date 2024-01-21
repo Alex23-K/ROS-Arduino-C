@@ -2,7 +2,6 @@ Bluetooth-controlled car using a joystick.
 The code to control a car using a joystick connected to a phone via Bluetooth. The car is equipped with an Arduino board and a Bluetooth module, which receives signals from the phone and translates them into movement commands for the car.
 
 Code structure
-The code is divided into several parts:
 
 Initialization: This part initializes the pins and variables used in the project.
 Bluetooth communication: This part handles the communication between the phone and the Bluetooth module.
