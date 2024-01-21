@@ -1,0 +1,70 @@
+#include <SoftwareSerial.h>
+SoftwareSerial Slave(2, 11);
+char BluetoothData;
+// 21
+
+#define RIGHT_FORWARD 5
+#define LEFT_FORWARD 7
+#define RIGHT_BACKWARD 4
+#define LEFT_BACKWARD 6
+
+void setup() {
+  Serial.begin(9600);
+  Slave.begin(9600);
+  
+  pinMode(RIGHT_FORWARD, OUTPUT);
+  pinMode(LEFT_FORWARD, OUTPUT);
+  pinMode(RIGHT_BACKWARD, OUTPUT);
+  pinMode(LEFT_BACKWARD, OUTPUT);
+}
+
+void Forward() {
+  digitalWrite(RIGHT_FORWARD, HIGH);
+  digitalWrite(LEFT_FORWARD, HIGH);
+  digitalWrite(RIGHT_BACKWARD, LOW);
+  digitalWrite(LEFT_BACKWARD, LOW);
+}
+
+void Backward() {
+ digitalWrite(RIGHT_BACKWARD, HIGH);
+  digitalWrite(LEFT_BACKWARD, HIGH);
+  digitalWrite(RIGHT_FORWARD, LOW);
+  digitalWrite(LEFT_FORWARD, LOW);
+}
+
+void Right() {
+  digitalWrite(RIGHT_FORWARD, LOW);   // Stop right wheel from moving forward
+  digitalWrite(LEFT_FORWARD, HIGH);   // Move left wheel forward
+  digitalWrite(RIGHT_BACKWARD, HIGH); // Move right wheel backward
+  digitalWrite(LEFT_BACKWARD, LOW);   // Stop left wheel from moving backward
+}
+
+void Left() {
+  digitalWrite(RIGHT_FORWARD, HIGH);  // Move right wheel forward
+  digitalWrite(LEFT_FORWARD, LOW);    // Stop left wheel from moving forward
+  digitalWrite(RIGHT_BACKWARD, LOW);  // Stop right wheel from moving backward
+  digitalWrite(LEFT_BACKWARD, HIGH);  // Move left wheel backward
+}
+
+void Stop() {
+  digitalWrite(RIGHT_FORWARD, LOW);
+  digitalWrite(LEFT_FORWARD, LOW);
+  digitalWrite(RIGHT_BACKWARD, LOW);
+  digitalWrite(LEFT_BACKWARD, LOW);
+}
+
+void loop() {
+  if (Slave.available()) {
+    BluetoothData = Slave.read();
+    Serial.println(BluetoothData);
+    switch (BluetoothData) {
+      case 'F': Forward(); break;
+      case 'B': Backward(); break;
+      case 'R': Right(); break;
+      case 'L': Left(); break;
+      case 'S': Stop(); break;  // added this line for stopping
+      default: break;  // Handle unrecognized commands or add additional cases for other commands
+    }
+  }
+}
+
